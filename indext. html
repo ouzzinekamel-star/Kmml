@@ -1,0 +1,1313 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>مكتبتي - منصتك الذكية للقراءة والمطالعة</title>
+    <!-- خط Cairo من Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <!-- FontAwesome للأيقونات -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --bg-main: #F4F7FA;
+            --bg-card: #FFFFFF;
+            --primary: #1769C2;
+            --primary-dark: #0D3B66;
+            --primary-light: #EAF4FF;
+            --text-main: #1A202C;
+            --text-muted: #718096;
+            --btn-read: #2D3748;
+            --btn-download: #E53E3E;
+            --btn-fav: #E53E3E;
+            --accent-green: #38A169;
+            --border-color: #E2E8F0;
+            --shadow-sm: 0 2px 4px rgba(0,0,0,0.04);
+            --shadow-md: 0 4px 12px rgba(0,0,0,0.08);
+            --shadow-lg: 0 8px 24px rgba(0,0,0,0.12);
+            --radius-sm: 8px;
+            --radius-md: 14px;
+            --radius-lg: 20px;
+            --transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        body.dark-mode {
+            --bg-main: #0F172A;
+            --bg-card: #1E293B;
+            --primary: #38BDF8;
+            --primary-dark: #0284C7;
+            --primary-light: #1E293B;
+            --text-main: #F8FAFC;
+            --text-muted: #94A3B8;
+            --border-color: #334155;
+            --shadow-sm: 0 2px 4px rgba(0,0,0,0.2);
+            --shadow-md: 0 4px 12px rgba(0,0,0,0.4);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Cairo', sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background-color: var(--bg-main);
+            color: var(--text-main);
+            direction: rtl;
+            padding-bottom: 75px;
+            min-height: 100vh;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        /* Top Header */
+        .header {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background-color: var(--bg-card);
+            border-bottom: 1px solid var(--border-color);
+            padding: 10px 16px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .header-brand {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+            text-decoration: none;
+            color: var(--primary);
+            font-weight: 800;
+            font-size: 1.3rem;
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .icon-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            border: none;
+            background: transparent;
+            color: var(--text-main);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 1.1rem;
+            transition: var(--transition);
+        }
+
+        .icon-btn:hover {
+            background-color: var(--primary-light);
+            color: var(--primary);
+        }
+
+        /* Container Layout */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 16px;
+        }
+
+        /* Banner Ad Space */
+        .ad-banner {
+            background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary) 100%);
+            border-radius: var(--radius-md);
+            padding: 20px;
+            color: #FFFFFF;
+            position: relative;
+            overflow: hidden;
+            box-shadow: var(--shadow-md);
+            margin-bottom: 24px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .ad-badge {
+            align-self: flex-start;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 0.7rem;
+            letter-spacing: 0.5px;
+        }
+
+        .ad-title {
+            font-size: 1.4rem;
+            font-weight: 700;
+        }
+
+        .ad-subtitle {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+
+        .ad-btn {
+            align-self: flex-start;
+            margin-top: 10px;
+            background: #FFFFFF;
+            color: var(--primary-dark);
+            border: none;
+            padding: 8px 18px;
+            border-radius: 20px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .ad-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+        }
+
+        /* Welcome Section */
+        .welcome-sec {
+            margin-bottom: 24px;
+        }
+
+        .welcome-sec h2 {
+            font-size: 1.4rem;
+            font-weight: 800;
+            margin-bottom: 4px;
+        }
+
+        .welcome-sec p {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+        }
+
+        /* Categories Grid */
+        .categories-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            margin-bottom: 28px;
+        }
+
+        @media (min-width: 600px) {
+            .categories-grid { grid-template-columns: repeat(4, 1fr); }
+        }
+
+        @media (min-width: 900px) {
+            .categories-grid { grid-template-columns: repeat(9, 1fr); }
+        }
+
+        .cat-card {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-md);
+            padding: 12px 8px;
+            text-align: center;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .cat-card:hover, .cat-card.active {
+            border-color: var(--primary);
+            background-color: var(--primary-light);
+            transform: translateY(-3px);
+        }
+
+        .cat-icon {
+            font-size: 1.5rem;
+        }
+
+        .cat-title {
+            font-size: 0.8rem;
+            font-weight: 700;
+        }
+
+        /* Section Header */
+        .sec-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 14px;
+        }
+
+        .sec-title {
+            font-size: 1.2rem;
+            font-weight: 800;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-view-all {
+            background: none;
+            border: none;
+            color: var(--primary);
+            font-weight: 700;
+            font-size: 0.85rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        /* Books Grid */
+        .books-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            margin-bottom: 32px;
+        }
+
+        @media (min-width: 600px) {
+            .books-grid { grid-template-columns: repeat(4, 1fr); }
+        }
+
+        @media (min-width: 900px) {
+            .books-grid { grid-template-columns: repeat(6, 1fr); }
+        }
+
+        .book-card {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-md);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .book-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .book-cover-wrap {
+            position: relative;
+            width: 100%;
+            padding-top: 140%;
+            background-color: #E2E8F0;
+            overflow: hidden;
+        }
+
+        .book-cover {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .fav-btn {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(4px);
+            border: none;
+            color: #A0AEC0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: var(--transition);
+            z-index: 2;
+        }
+
+        .fav-btn.active {
+            color: var(--btn-fav);
+            background: #FFFFFF;
+        }
+
+        .book-info {
+            padding: 8px;
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+        }
+
+        .book-title {
+            font-size: 0.85rem;
+            font-weight: 700;
+            line-height: 1.25;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            margin-bottom: 4px;
+        }
+
+        .book-author {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        /* Bottom Navigation */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 60px;
+            background-color: var(--bg-card);
+            border-top: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            z-index: 100;
+            box-shadow: 0 -2px 10px rgba(0,0,0,0.05);
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 3px;
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 0.7rem;
+            font-weight: 600;
+            cursor: pointer;
+            width: 20%;
+            border: none;
+            background: none;
+            transition: var(--transition);
+        }
+
+        .nav-item i {
+            font-size: 1.2rem;
+        }
+
+        .nav-item.active {
+            color: var(--primary);
+        }
+
+        /* Sidebar Drawer */
+        .drawer-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(2px);
+            z-index: 200;
+            opacity: 0;
+            pointer-events: none;
+            transition: var(--transition);
+        }
+
+        .drawer-overlay.open {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .drawer {
+            position: fixed;
+            top: 0;
+            right: -280px;
+            width: 280px;
+            height: 100%;
+            background-color: var(--bg-card);
+            z-index: 201;
+            transition: var(--transition);
+            display: flex;
+            flex-direction: column;
+            box-shadow: var(--shadow-lg);
+        }
+
+        .drawer.open {
+            right: 0;
+        }
+
+        .drawer-header {
+            padding: 20px;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .drawer-menu {
+            padding: 12px;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .drawer-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 16px;
+            border-radius: var(--radius-sm);
+            color: var(--text-main);
+            text-decoration: none;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .drawer-item:hover {
+            background-color: var(--primary-light);
+            color: var(--primary);
+        }
+
+        /* Modal Base */
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.6);
+            z-index: 300;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 16px;
+            opacity: 0;
+            pointer-events: none;
+            transition: var(--transition);
+        }
+
+        .modal.open {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .modal-content {
+            background-color: var(--bg-card);
+            border-radius: var(--radius-lg);
+            width: 100%;
+            max-width: 600px;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: var(--shadow-lg);
+            padding: 20px;
+            position: relative;
+        }
+
+        /* Search View Overlay */
+        .search-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: var(--bg-main);
+            z-index: 150;
+            display: none;
+            flex-direction: column;
+        }
+
+        .search-overlay.open {
+            display: flex;
+        }
+
+        .search-header {
+            padding: 12px 16px;
+            background-color: var(--bg-card);
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .search-input-wrap {
+            flex-grow: 1;
+            position: relative;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 10px 36px 10px 12px;
+            border-radius: 20px;
+            border: 1px solid var(--border-color);
+            background-color: var(--bg-main);
+            color: var(--text-main);
+            font-size: 0.95rem;
+            outline: none;
+        }
+
+        .search-input-wrap i {
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-muted);
+        }
+
+        /* Reading View Overlay */
+        .reader-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #1A202C;
+            color: #FFFFFF;
+            z-index: 400;
+            display: none;
+            flex-direction: column;
+        }
+
+        .reader-overlay.open {
+            display: flex;
+        }
+
+        .reader-header {
+            padding: 12px 16px;
+            background: #2D3748;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .reader-body {
+            flex-grow: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            overflow: auto;
+        }
+
+        .pdf-mock {
+            background: #FFFFFF;
+            color: #000000;
+            width: 100%;
+            max-width: 700px;
+            min-height: 80vh;
+            padding: 40px;
+            border-radius: 4px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+            font-family: serif;
+            line-height: 1.8;
+            font-size: 1.1rem;
+        }
+
+        /* Form Styles for Admin */
+        .form-group {
+            margin-bottom: 14px;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: 700;
+            font-size: 0.85rem;
+            margin-bottom: 4px;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 10px;
+            border-radius: var(--radius-sm);
+            border: 1px solid var(--border-color);
+            background-color: var(--bg-main);
+            color: var(--text-main);
+            font-size: 0.9rem;
+            outline: none;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border-radius: var(--radius-sm);
+            border: none;
+            font-weight: 700;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: var(--transition);
+        }
+
+        .btn-primary { background-color: var(--primary); color: #FFFFFF; }
+        .btn-success { background-color: var(--accent-green); color: #FFFFFF; }
+        .btn-danger { background-color: var(--btn-download); color: #FFFFFF; }
+
+        .hidden { display: none !important; }
+    </style>
+</head>
+<body>
+
+    <!-- Header -->
+    <header class="header">
+        <button class="icon-btn" id="openDrawerBtn"><i class="fa-solid fa-bars"></i></button>
+        <a class="header-brand" id="brandBtn">
+            <i class="fa-solid fa-book-open"></i>
+            <span>مكتبتي</span>
+        </a>
+        <div class="header-actions">
+            <button class="icon-btn" id="openSearchBtn"><i class="fa-solid fa-magnifying-glass"></i></button>
+            <button class="icon-btn" id="themeToggleBtn"><i class="fa-regular fa-moon"></i></button>
+            <button class="icon-btn" id="shareBtn"><i class="fa-solid fa-share-nodes"></i></button>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <div class="container" id="mainContainer">
+        
+        <!-- Tab 1: Home View -->
+        <div id="viewHome" class="view-tab">
+            <!-- Ad Space -->
+            <div class="ad-banner">
+                <span class="ad-badge">إعلان</span>
+                <div class="ad-title">اقرأ لتتغير حياتك 📖</div>
+                <div class="ad-subtitle">استمتع بآلاف الكتب المجانية والروايات الأكثر مبيعاً الآن.</div>
+                <button class="ad-btn" onclick="scrollToPopular()">اكتشف الكتب 🔥</button>
+            </div>
+
+            <!-- Welcome Section -->
+            <div class="welcome-sec">
+                <h2>مرحبًا بك في مكتبتك 📖</h2>
+                <p>اكتشف كتبًا جديدة، واقرأ ما تحب، واجعل المعرفة جزءًا من يومك.</p>
+            </div>
+
+            <!-- Categories Grid -->
+            <div class="categories-grid" id="categoriesGrid">
+                <!-- Injected via JS -->
+            </div>
+
+            <!-- Dynamic Sections (Popular, Religion, Novels, etc.) -->
+            <div id="sectionsContainer">
+                <!-- Injected via JS -->
+            </div>
+        </div>
+
+        <!-- Tab 2: All Categories View -->
+        <div id="viewCategories" class="view-tab hidden">
+            <div class="sec-header">
+                <h2 class="sec-title">تصفح حسب القسم</h2>
+            </div>
+            <div class="categories-grid" id="allCategoriesGrid">
+                <!-- Injected via JS -->
+            </div>
+            <div id="categoryBooksContainer"></div>
+        </div>
+
+        <!-- Tab 3: My Library View -->
+        <div id="viewMyLibrary" class="view-tab hidden">
+            <div class="sec-header">
+                <h2 class="sec-title">مكتبتي الشخصية ❤️</h2>
+            </div>
+            <div class="sec-header">
+                <h3>المفضلة</h3>
+            </div>
+            <div class="books-grid" id="favBooksGrid">
+                <!-- Favorites Injected via JS -->
+            </div>
+            <div id="emptyFavMsg" class="hidden" style="text-align: center; padding: 40px; color: var(--text-muted);">
+                <i class="fa-regular fa-heart" style="font-size: 3rem; margin-bottom: 12px;"></i>
+                <p>مكتبتك فارغة حاليًا. ابدأ باكتشاف الكتب وأضف ما يعجبك.</p>
+            </div>
+        </div>
+
+        <!-- Tab 4: Notifications View -->
+        <div id="viewNotifications" class="view-tab hidden">
+            <div class="sec-header">
+                <h2 class="sec-title">الإشعارات 🔔</h2>
+            </div>
+            <div style="background: var(--bg-card); border-radius: var(--radius-md); padding: 16px; border: 1px solid var(--border-color);">
+                <p style="font-weight: 700; margin-bottom: 4px;">🎉 مرحباً بك في النسخة الجديدة!</p>
+                <p style="font-size: 0.85rem; color: var(--text-muted);">تم تفعيل مكتبتي بتصميمها الاحترافي الجديد. استمتع بقراءة أفضل الكتب.</p>
+                <span style="font-size: 0.75rem; color: var(--text-muted); display:block; margin-top: 8px;">منذ ساعة</span>
+            </div>
+        </div>
+
+        <!-- Tab 5: Profile View -->
+        <div id="viewProfile" class="view-tab hidden">
+            <div class="sec-header">
+                <h2 class="sec-title">الملف الشخصي 👤</h2>
+            </div>
+            <div style="background: var(--bg-card); border-radius: var(--radius-md); padding: 24px; text-align: center; border: 1px solid var(--border-color);">
+                <div style="width: 80px; height: 80px; border-radius: 50%; background: var(--primary-light); color: var(--primary); display: flex; align-items: center; justify-content: center; font-size: 2rem; margin: 0 auto 12px;">
+                    <i class="fa-solid fa-user"></i>
+                </div>
+                <h3>قارئ مكتبتي</h3>
+                <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 16px;">مرحباً بك في مساحتك الخاصة</p>
+                <button class="btn btn-primary" onclick="openAdminModal()">لوحة الإدارة ⚙️</button>
+            </div>
+        </div>
+
+        <!-- Section Details View (View All View) -->
+        <div id="viewSectionDetails" class="view-tab hidden">
+            <div class="sec-header">
+                <button class="btn" style="background:none; color:var(--text-main);" onclick="switchTab('viewHome')"><i class="fa-solid fa-arrow-right"></i> عودة</button>
+                <h2 class="sec-title" id="sectionDetailsTitle">عنوان القسم</h2>
+            </div>
+            <div class="books-grid" id="sectionDetailsGrid"></div>
+        </div>
+    </div>
+
+    <!-- Bottom Navigation -->
+    <nav class="bottom-nav">
+        <button class="nav-item active" onclick="switchTab('viewHome', this)">
+            <i class="fa-solid fa-house"></i>
+            <span>الرئيسية</span>
+        </button>
+        <button class="nav-item" onclick="switchTab('viewCategories', this)">
+            <i class="fa-solid fa-border-all"></i>
+            <span>الأقسام</span>
+        </button>
+        <button class="nav-item" onclick="switchTab('viewMyLibrary', this)">
+            <i class="fa-solid fa-heart"></i>
+            <span>مكتبتي</span>
+        </button>
+        <button class="nav-item" onclick="switchTab('viewNotifications', this)">
+            <i class="fa-solid fa-bell"></i>
+            <span>الإشعارات</span>
+        </button>
+        <button class="nav-item" onclick="switchTab('viewProfile', this)">
+            <i class="fa-solid fa-user"></i>
+            <span>حسابي</span>
+        </button>
+    </nav>
+
+    <!-- Drawer Overlay -->
+    <div class="drawer-overlay" id="drawerOverlay" onclick="closeDrawer()"></div>
+    <div class="drawer" id="drawer">
+        <div class="drawer-header">
+            <div class="header-brand"><i class="fa-solid fa-book-open"></i> مكتبتي</div>
+            <button class="icon-btn" onclick="closeDrawer()"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+        <div class="drawer-menu">
+            <a class="drawer-item" onclick="switchTab('viewHome'); closeDrawer();"><i class="fa-solid fa-house"></i> الرئيسية</a>
+            <a class="drawer-item" onclick="switchTab('viewCategories'); closeDrawer();"><i class="fa-solid fa-border-all"></i> الأقسام</a>
+            <a class="drawer-item" onclick="switchTab('viewMyLibrary'); closeDrawer();"><i class="fa-solid fa-heart"></i> مكتبتي</a>
+            <a class="drawer-item" onclick="scrollToPopular(); closeDrawer();"><i class="fa-solid fa-fire"></i> الكتب الشائعة</a>
+            <a class="drawer-item" onclick="shareSite(); closeDrawer();"><i class="fa-solid fa-share-nodes"></i> مشاركة الموقع</a>
+            <a class="drawer-item" onclick="openAdminModal(); closeDrawer();"><i class="fa-solid fa-gear"></i> لوحة الإدارة</a>
+        </div>
+    </div>
+
+    <!-- Search Overlay -->
+    <div class="search-overlay" id="searchOverlay">
+        <div class="search-header">
+            <button class="icon-btn" onclick="closeSearch()"><i class="fa-solid fa-arrow-right"></i></button>
+            <div class="search-input-wrap">
+                <i class="fa-solid fa-magnifying-glass"></i>
+                <input type="text" class="search-input" id="searchInput" placeholder="ابحث باسم الكتاب، المؤلف..." oninput="handleSearch()">
+            </div>
+        </div>
+        <div class="container">
+            <div class="books-grid" id="searchResultsGrid" style="margin-top: 16px;"></div>
+            <div id="noSearchRes" class="hidden" style="text-align: center; padding: 40px; color: var(--text-muted);">
+                لم نعثر على كتب مطابقة لبحثك.
+            </div>
+        </div>
+    </div>
+
+    <!-- Book Details Modal -->
+    <div class="modal" id="bookDetailsModal">
+        <div class="modal-content">
+            <button class="icon-btn" style="position: absolute; top: 12px; left: 12px;" onclick="closeBookModal()"><i class="fa-solid fa-xmark"></i></button>
+            <div style="display: flex; gap: 16px; margin-bottom: 16px; flex-wrap: wrap;">
+                <img id="modalBookCover" src="" style="width: 110px; height: 160px; object-fit: cover; border-radius: var(--radius-sm);" alt="غلاف">
+                <div style="flex: 1; min-width: 180px;">
+                    <h2 id="modalBookTitle" style="font-size: 1.2rem; font-weight: 800; margin-bottom: 6px;"></h2>
+                    <p id="modalBookAuthor" style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 8px;"></p>
+                    <span id="modalBookCat" style="background: var(--primary-light); color: var(--primary); padding: 2px 10px; border-radius: 12px; font-size: 0.75rem; font-weight: 700;"></span>
+                </div>
+            </div>
+            
+            <p id="modalBookDesc" style="font-size: 0.9rem; line-height: 1.6; color: var(--text-main); margin-bottom: 20px;"></p>
+            
+            <div style="display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 16px;">
+                <button class="btn btn-success" style="flex: 1;" onclick="startReading()"><i class="fa-solid fa-book-open"></i> قراءة</button>
+                <button class="btn btn-danger" style="flex: 1;" onclick="downloadPDF()"><i class="fa-solid fa-download"></i> تحميل PDF</button>
+                <button class="btn" id="modalFavBtn" style="border: 1px solid var(--border-color);" onclick="toggleFavFromModal()"><i class="fa-regular fa-heart"></i></button>
+            </div>
+
+            <!-- Statistics -->
+            <div style="display: flex; justify-content: space-around; border-top: 1px solid var(--border-color); padding-top: 12px; font-size: 0.8rem; color: var(--text-muted);">
+                <span>👁️ <span id="modalViews">0</span> مشاهدة</span>
+                <span>⬇️ <span id="modalDownloads">0</span> تحميل</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Reader Overlay -->
+    <div class="reader-overlay" id="readerOverlay">
+        <div class="reader-header">
+            <button class="icon-btn" style="color: #FFF;" onclick="closeReader()"><i class="fa-solid fa-arrow-right"></i></button>
+            <span id="readerTitle" style="font-weight: 700; font-size: 0.95rem;"></span>
+            <div></div>
+        </div>
+        <div class="reader-body">
+            <div class="pdf-mock" id="readerContent">
+                <!-- Simulated Reading View -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Admin Panel Modal -->
+    <div class="modal" id="adminModal">
+        <div class="modal-content">
+            <button class="icon-btn" style="position: absolute; top: 12px; left: 12px;" onclick="closeAdminModal()"><i class="fa-solid fa-xmark"></i></button>
+            <h2 style="font-weight: 800; margin-bottom: 16px;">لوحة إدارة المكتبة ⚙️</h2>
+            
+            <form id="addBookForm" onsubmit="saveBook(event)">
+                <div class="form-group">
+                    <label>عنوان الكتاب</label>
+                    <input type="text" class="form-control" id="formTitle" required>
+                </div>
+                <div class="form-group">
+                    <label>اسم المؤلف</label>
+                    <input type="text" class="form-control" id="formAuthor" required>
+                </div>
+                <div class="form-group">
+                    <label>التصنيف</label>
+                    <select class="form-control" id="formCat" required>
+                        <option value="دينية">الكتب الدينية</option>
+                        <option value="ثقافية">الكتب الثقافية</option>
+                        <option value="روايات">الروايات والقصص</option>
+                        <option value="تعليمية">الكتب التعليمية</option>
+                        <option value="تطوير الذات">تطوير الذات</option>
+                        <option value="علمية">الكتب العلمية</option>
+                        <option value="قانونية">الكتب القانونية</option>
+                        <option value="تقنية">الكتب التقنية</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>رابط غلاف الكتاب (Image URL)</label>
+                    <input type="url" class="form-control" id="formCover" placeholder="https://..." required>
+                </div>
+                <div class="form-group">
+                    <label>وصف مختصر</label>
+                    <textarea class="form-control" id="formDesc" rows="3" required></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary" style="width: 100%;">حفظ ونشر الكتاب 🚀</button>
+            </form>
+        </div>
+    </div>
+    <script>
+        // Database & Initial State
+        const CATEGORIES = [
+            { id: 'all', title: 'جميع الكتب', icon: '📚' },
+            { id: 'دينية', title: 'الكتب الدينية', icon: '🕌' },
+            { id: 'ثقافية', title: 'الكتب الثقافية', icon: '🧠' },
+            { id: 'روايات', title: 'الروايات والقصص', icon: '📖' },
+            { id: 'تعليمية', title: 'الكتب التعليمية', icon: '🎓' },
+            { id: 'تطوير الذات', title: 'تطوير الذات', icon: '🚀' },
+            { id: 'علمية', title: 'الكتب العلمية', icon: '🔬' },
+            { id: 'قانونية', title: 'الكتب القانونية', icon: '⚖️' },
+            { id: 'تقنية', title: 'الكتب التقنية', icon: '💻' }
+        ];
+
+        let booksData = [
+            {
+                id: '1',
+                title: 'مقدمة ابن خلدون',
+                author: 'ابن خلدون',
+                category: 'ثقافية',
+                cover: 'https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?w=400',
+                desc: 'موسوعة تاريخية واجتماعية وسياسية شمولية تحلل عمرون البشرية وتطور الحضارات.',
+                views: 1250,
+                downloads: 430,
+                popular: true
+            },
+            {
+                id: '2',
+                title: 'الرحيق المختوم',
+                author: 'صفي الرحمن المباركفوري',
+                category: 'دينية',
+                cover: 'https://images.unsplash.com/photo-1589829085413-56de8ae18c73?w=400',
+                desc: 'بحث في السيرة النبوية حائز على الجائزة الأولى في مسابقة رابطة العالم الإسلامي.',
+                views: 3100,
+                downloads: 1200,
+                popular: true
+            },
+            {
+                id: '3',
+                title: 'سيرة حب وفكر',
+                author: 'علي عزت بيجوفيتش',
+                category: 'ثقافية',
+                cover: 'https://images.unsplash.com/photo-1512820790803-83ca734da794?w=400',
+                desc: 'كتاب يستعرض قضايا الفكر والإنسان والعقيدة الإسلامية الرصينة.',
+                views: 890,
+                downloads: 310,
+                popular: false
+            },
+            {
+                id: '4',
+                title: 'أرض زيكولا',
+                author: 'عمرو عبد الحميد',
+                category: 'روايات',
+                cover: 'https://images.unsplash.com/photo-1543002588-bfa74002ed7e?w=400',
+                desc: 'رواية خيالية ممتعة تشد القارئ لعالم تُقاس فيه الثروة بالذكاء.',
+                views: 5400,
+                downloads: 2300,
+                popular: true
+            },
+            {
+                id: '5',
+                title: 'العادات الذرية',
+                author: 'جيمس كلير',
+                category: 'تطوير الذات',
+                cover: 'https://images.unsplash.com/photo-1532012197267-da84d127e765?w=400',
+                desc: 'إطار عمل ممتازة للتحسين اليومي وبناء العادات الإيجابية الصغيرة.',
+                views: 4200,
+                downloads: 1800,
+                popular: true
+            },
+            {
+                id: '6',
+                title: 'أساسيات البرمجة بلغة جافاسكريبت',
+                author: 'أحمد محمود',
+                category: 'تقنية',
+                cover: 'https://images.unsplash.com/photo-1517694712202-14dd9538aa97?w=400',
+                desc: 'دليل شامل للبدء في عالم البرمجة وتطوير مواقع الويب الحديثة.',
+                views: 1500,
+                downloads: 600,
+                popular: false
+            }
+        ];
+
+        let favorites = JSON.parse(localStorage.getItem('my_fav_books') || '[]');
+        let selectedBook = null;
+
+        // Initialization
+        document.addEventListener('DOMContentLoaded', () => {
+            renderCategories();
+            renderHomeSections();
+            loadThemePreference();
+        });
+
+        // Render Categories
+        function renderCategories() {
+            const grid = document.getElementById('categoriesGrid');
+            const allGrid = document.getElementById('allCategoriesGrid');
+            
+            grid.innerHTML = CATEGORIES.map(cat => `
+                <div class="cat-card" onclick="filterByCategory('${cat.id}')">
+                    <span class="cat-icon">${cat.icon}</span>
+                    <span class="cat-title">${cat.title}</span>
+                </div>
+            `).join('');
+
+            if(allGrid) {
+                allGrid.innerHTML = grid.innerHTML;
+            }
+        }
+
+        // Render Book Card Component
+        function createBookCard(book) {
+            const isFav = favorites.includes(book.id);
+            return `
+                <div class="book-card" onclick="openBookModal('${book.id}')">
+                    <div class="book-cover-wrap">
+                        <img class="book-cover" src="${book.cover}" alt="${book.title}" loading="lazy">
+                        <button class="fav-btn ${isFav ? 'active' : ''}" onclick="toggleFav(event, '${book.id}')">
+                            <i class="fa-${isFav ? 'solid' : 'regular'} fa-heart"></i>
+                        </button>
+                    </div>
+                    <div class="book-info">
+                        <div class="book-title">${book.title}</div>
+                        <div class="book-author">${book.author}</div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Render Home View Sections
+        function renderHomeSections() {
+            const container = document.getElementById('sectionsContainer');
+            container.innerHTML = '';
+
+            // Popular Section
+            const popularBooks = booksData.filter(b => b.popular);
+            if(popularBooks.length > 0) {
+                container.appendChild(createSectionNode('🔥 كتب شائعة', popularBooks, 'popular'));
+            }
+
+            // Group by category
+            const categoriesMap = {};
+            booksData.forEach(b => {
+                if(!categoriesMap[b.category]) categoriesMap[b.category] = [];
+                categoriesMap[b.category].push(b);
+            });
+
+            for(const [cat, books] of Object.entries(categoriesMap)) {
+                container.appendChild(createSectionNode(cat, books, cat));
+            }
+        }
+
+        function createSectionNode(title, books, catId) {
+            const div = document.createElement('div');
+            div.className = 'section-block';
+            div.style.marginBottom = '24px';
+            div.innerHTML = `
+                <div class="sec-header">
+                    <h3 class="sec-title">${title}</h3>
+                    <button class="btn-view-all" onclick="showSectionDetails('${title}', '${catId}')">
+                        عرض الكل <i class="fa-solid fa-chevron-left"></i>
+                    </button>
+                </div>
+                <div class="books-grid">
+                    ${books.slice(0, 6).map(b => createBookCard(b)).join('')}
+                </div>
+            `;
+            return div;
+        }
+        // Navigation Tabs Handling
+        function switchTab(tabId, element = null) {
+            document.querySelectorAll('.view-tab').forEach(el => el.classList.add('hidden'));
+            document.getElementById(tabId).classList.remove('hidden');
+
+            if(element) {
+                document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
+                element.classList.add('active');
+            }
+
+            if(tabId === 'viewMyLibrary') {
+                renderFavorites();
+            }
+        }
+
+        // Favorites Handling
+        function toggleFav(e, id) {
+            e.stopPropagation();
+            if(favorites.includes(id)) {
+                favorites = favorites.filter(favId => favId !== id);
+            } else {
+                favorites.push(id);
+            }
+            localStorage.setItem('my_fav_books', JSON.stringify(favorites));
+            
+            // Refresh Current View
+            renderHomeSections();
+            if(!document.getElementById('viewMyLibrary').classList.contains('hidden')) {
+                renderFavorites();
+            }
+        }
+
+        function renderFavorites() {
+            const favGrid = document.getElementById('favBooksGrid');
+            const emptyMsg = document.getElementById('emptyFavMsg');
+            const favBooks = booksData.filter(b => favorites.includes(b.id));
+
+            if(favBooks.length === 0) {
+                favGrid.innerHTML = '';
+                emptyMsg.classList.remove('hidden');
+            } else {
+                emptyMsg.classList.add('hidden');
+                favGrid.innerHTML = favBooks.map(b => createBookCard(b)).join('');
+            }
+        }
+
+        // Book Details Modal
+        function openBookModal(id) {
+            selectedBook = booksData.find(b => b.id === id);
+            if(!selectedBook) return;
+
+            document.getElementById('modalBookCover').src = selectedBook.cover;
+            document.getElementById('modalBookTitle').innerText = selectedBook.title;
+            document.getElementById('modalBookAuthor').innerText = selectedBook.author;
+            document.getElementById('modalBookCat').innerText = selectedBook.category;
+            document.getElementById('modalBookDesc').innerText = selectedBook.desc;
+            document.getElementById('modalViews').innerText = selectedBook.views;
+            document.getElementById('modalDownloads').innerText = selectedBook.downloads;
+
+            const isFav = favorites.includes(selectedBook.id);
+            const favBtn = document.getElementById('modalFavBtn');
+            favBtn.innerHTML = `<i class="fa-${isFav ? 'solid' : 'regular'} fa-heart"></i>`;
+            favBtn.style.color = isFav ? 'var(--btn-fav)' : 'var(--text-main)';
+
+            document.getElementById('bookDetailsModal').classList.add('open');
+        }
+
+        function closeBookModal() {
+            document.getElementById('bookDetailsModal').classList.remove('open');
+        }
+
+        function toggleFavFromModal() {
+            if(!selectedBook) return;
+            toggleFav(new Event('click'), selectedBook.id);
+            openBookModal(selectedBook.id);
+        }
+
+        // Reader View
+        function startReading() {
+            if(!selectedBook) return;
+            closeBookModal();
+            document.getElementById('readerTitle').innerText = selectedBook.title;
+            document.getElementById('readerContent').innerHTML = `
+                <h1 style="text-align: center; margin-bottom: 20px;">${selectedBook.title}</h1>
+                <h3 style="text-align: center; color: #555; margin-bottom: 40px;">بقلم: ${selectedBook.author}</h3>
+                <p>هذا النص يمثل نموذجاً محاكياً لقراءة كتاب <b>"${selectedBook.title}"</b> داخل عارض الـ PDF الخاص بموقع <b>مكتبتي</b>.</p>
+                <br>
+                <p>${selectedBook.desc}</p>
+                <br>
+                <p>يتيح الموقع واجهة سلسة ومريحة للعين تساعدك على التركيز في القراءة بدون تشتيت، مع حفظ موضع القراءة محلياً تلقائياً.</p>
+            `;
+            document.getElementById('readerOverlay').classList.add('open');
+        }
+
+        function closeReader() {
+            document.getElementById('readerOverlay').classList.remove('open');
+        }
+
+        function downloadPDF() {
+            alert('بدأ تحميل ملف الـ PDF الخاص بكتاب: ' + selectedBook.title);
+        }
+
+        // Search System
+        document.getElementById('openSearchBtn').addEventListener('click', () => {
+            document.getElementById('searchOverlay').classList.add('open');
+            document.getElementById('searchInput').focus();
+        });
+
+        function closeSearch() {
+            document.getElementById('searchOverlay').classList.remove('open');
+            document.getElementById('searchInput').value = '';
+            document.getElementById('searchResultsGrid').innerHTML = '';
+        }
+
+        function handleSearch() {
+            const query = document.getElementById('searchInput').value.trim().toLowerCase();
+            const resultsGrid = document.getElementById('searchResultsGrid');
+            const noRes = document.getElementById('noSearchRes');
+
+            if(!query) {
+                resultsGrid.innerHTML = '';
+                noRes.classList.add('hidden');
+                return;
+            }
+
+            const filtered = booksData.filter(b => 
+                b.title.toLowerCase().includes(query) || 
+                b.author.toLowerCase().includes(query) ||
+                b.category.toLowerCase().includes(query)
+            );
+
+            if(filtered.length === 0) {
+                resultsGrid.innerHTML = '';
+                noRes.classList.remove('hidden');
+            } else {
+                noRes.classList.add('hidden');
+                resultsGrid.innerHTML = filtered.map(b => createBookCard(b)).join('');
+            }
+        }
+
+        // Section View All Page
+        function showSectionDetails(title, catId) {
+            document.getElementById('sectionDetailsTitle').innerText = title;
+            const grid = document.getElementById('sectionDetailsGrid');
+            
+            let filtered = booksData;
+            if(catId === 'popular') {
+                filtered = booksData.filter(b => b.popular);
+            } else if(catId !== 'all') {
+                filtered = booksData.filter(b => b.category === catId || b.category === title);
+            }
+
+            grid.innerHTML = filtered.map(b => createBookCard(b)).join('');
+            switchTab('viewSectionDetails');
+        }
+
+        function filterByCategory(catId) {
+            const cat = CATEGORIES.find(c => c.id === catId);
+            showSectionDetails(cat ? cat.title : 'الأقسام', catId);
+        }
+
+        // Drawer Menu Control
+        document.getElementById('openDrawerBtn').addEventListener('click', () => {
+            document.getElementById('drawer').classList.add('open');
+            document.getElementById('drawerOverlay').classList.add('open');
+        });
+
+        function closeDrawer() {
+            document.getElementById('drawer').classList.remove('open');
+            document.getElementById('drawerOverlay').classList.remove('open');
+        }
+
+        // Dark / Light Mode Toggle
+        const themeBtn = document.getElementById('themeToggleBtn');
+        themeBtn.addEventListener('click', () => {
+            document.body.classList.toggle('dark-mode');
+            const isDark = document.body.classList.contains('dark-mode');
+            themeBtn.innerHTML = isDark ? '<i class="fa-regular fa-sun"></i>' : '<i class="fa-regular fa-moon"></i>';
+            localStorage.setItem('theme_mode', isDark ? 'dark' : 'light');
+        });
+
+        function loadThemePreference() {
+            if(localStorage.getItem('theme_mode') === 'dark') {
+                document.body.classList.add('dark-mode');
+                themeBtn.innerHTML = '<i class="fa-regular fa-sun"></i>';
+            }
+        }
+
+        // Utility Features
+        function shareSite() {
+            if(navigator.share) {
+                navigator.share({
+                    title: 'مكتبتي',
+                    text: 'اقرأ واستمتع بآلاف الكتب العربية المجانية على منصة مكتبتي!',
+                    url: window.location.href
+                });
+            } else {
+                alert('تم نسخ رابط الموقع للحافظة!');
+            }
+        }
+
+        function scrollToPopular() {
+            switchTab('viewHome');
+            window.scrollTo({ top: 300, behavior: 'smooth' });
+        }
+
+        // Admin Modal & Adding Books
+        function openAdminModal() {
+            document.getElementById('adminModal').classList.add('open');
+        }
+
+        function closeAdminModal() {
+            document.getElementById('adminModal').classList.remove('open');
+        }
+
+        function saveBook(e) {
+            e.preventDefault();
+            const newBook = {
+                id: Date.now().toString(),
+                title: document.getElementById('formTitle').value,
+                author: document.getElementById('formAuthor').value,
+                category: document.getElementById('formCat').value,
+                cover: document.getElementById('formCover').value,
+                desc: document.getElementById('formDesc').value,
+                views: 1,
+                downloads: 0,
+                popular: false
+            };
+
+            booksData.unshift(newBook);
+            renderHomeSections();
+            closeAdminModal();
+            document.getElementById('addBookForm').reset();
+            alert('تم نشر الكتاب وإضافته للمكتبة بنجاح! 🎉');
+        }
+    </script>
+</body>
+</html>
